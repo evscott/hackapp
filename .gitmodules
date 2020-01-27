@@ -1,0 +1,6 @@
+[submodule "hackapp-client"]
+	path = hackapp-client
+	url = git@github.com:evscott/hackapp-client.git
+[submodule "hackapp-api"]
+	path = hackapp-api
+	url = git@github.com:evscott/hackapp-api.git
