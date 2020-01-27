@@ -1,0 +1,88 @@
+version: '3'
+
+services:
+
+  hackapp-db:
+    container_name: hackapp-db
+    image: postgres
+    restart: always
+    hostname: hackapp-db
+    environment:
+      GET_HOST_FROM: dns
+      POSTGRES_DB: dev
+      POSTGRES_USER: user
+      POSTGRES_PASWORD: password
+    ports:
+      - 5432:5432
+    networks:
+      - hackapp-net
+
+  hackapp-api:
+    container_name: hackapp-api
+    image: hackapp-api:latest
+    hostname: hackapp-api
+    build:
+      context: hackapp-api/
+      dockerfile: Dockerfile
+    environment:
+      GET_HOSTS_FROM: dns
+      PGHOST: hackapp-db
+      PGPORT: 5432
+      PGUSER: user
+      PGPASSWORD: password
+      PGDATABASE: dev
+    networks:
+      - hackapp-net
+    ports:
+      - 8080:8080
+    depends_on:
+      - hackapp-db
+    links:
+      - hackapp-db
+    labels:
+      kompose.service.type: LoadBalancer
+
+  hackapp-client:
+    container_name: hackapp-client
+    image: hackapp-client:latest
+    hostname: hackapp-client
+    build:
+      context: hackapp-client/
+      dockerfile: Dockerfile
+    networks:
+      - hackapp-net
+    ports:
+      - 9090:9090
+    depends_on:
+      - hackapp-api
+    links:
+      - hackapp-api
+    labels:
+      kompose.service.type: LoadBalancer
+
+  hackapp-migrator:
+    container_name: hackapp-migrator
+    image: hackapp-migrator:latest
+    hostname: hackapp-api
+    build:
+      context: migrator/
+      dockerfile: Dockerfile
+    environment:
+      GET_HOSTS_FROM: dns
+      PGHOST: hackapp-db
+      PGPORT: 5432
+      PGUSER: user
+      PGPASSWORD: password
+      PGDATABASE: dev
+    networks:
+      - hackapp-net
+    depends_on:
+      - hackapp-db
+    links:
+      - hackapp-db
+    labels:
+      kompose.service.type: LoadBalancer
+
+networks:
+  hackapp-net:
+    driver: bridge
