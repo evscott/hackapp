@@ -2,7 +2,7 @@
 
 ## About
 
-**Hackapp** consolidates [hackapp-client](https://github.com/evscott/hackapp-client) and [hackapp-api](https://github.com/evscott/hackapp-api) as submodule dependencies of a single repository to facilitate development using Docker-compose.
+**Hackapp** consolidates [hackapp-client](https://github.com/evscott/hackapp-client) and [hackapp-api](https://github.com/evscott/hackapp-api) into submodule dependencies of a single repository to facilitate development using Docker-compose.
 
 ## Getting started
 
