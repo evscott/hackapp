@@ -1,1 +1,1 @@
-# pay-mta-migrator
+hackapp-migrator
